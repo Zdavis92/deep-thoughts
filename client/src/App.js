@@ -12,6 +12,8 @@ import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@ap
 // We renamed BrowerRouter to Router to make it easier to work with
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+import { setContext } from '@apollo/client/link/context';
+
 import Header from './components/Header';
 import Footer from './components/Footer';
 
@@ -28,10 +30,21 @@ const httpLink = createHttpLink({
   uri: '/graphql',
 });
 
+// Sets the HTTP request headers to include the token from localStorage
+const authLink = setContext((_, { headers }) => { // We don't need the first param in the setContext which stores the current request
+  const token = localStorage.getItem('id_token'); // We can use an underscore as a placeholder so we can access the 2nd param.
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
 // Instantiate the Apollo Client instance and create the connection to the api endpoint.
 // Instantiate a new cache object using InMemoryCache().
 const client = new ApolloClient({
-  link: httpLink,
+  link: authLink.concat(httpLink), // combine authLink and httpLink so that every request retrieves the token and sets the request headers befor making the request to the API
   cache: new InMemoryCache(),
 });
 
@@ -60,6 +73,10 @@ function App() {
               />
               <Route
                 path="/profile/:username"
+                element={<Profile />}
+              />
+               <Route
+                path="/profile"
                 element={<Profile />}
               />
               <Route
