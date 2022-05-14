@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { QUERY_THOUGHT } from '../utils/queries';
 import ReactionList from '../components/ReactionList';
+import Auth from '../utils/auth';
+import ReactionForm from '../components/ReactionForm';
 
 const SingleThought = props => {
   // gets the param id from the url and saves it to the variable 'thoughtId'
@@ -32,6 +34,7 @@ const SingleThought = props => {
         </div>
       </div>
       {thought.reactionCount > 0 && <ReactionList reactions={thought.reactions} />}
+      {Auth.loggedIn() && <ReactionForm thoughtId={thought._id} />}
     </div>
   );
 };
