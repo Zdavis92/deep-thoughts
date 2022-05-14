@@ -36,7 +36,7 @@ const Profile = () => {
   
   // navigate to personal profile page if username is the logged-in user's
   if (Auth.loggedIn() && Auth.getProfile().data.username === userParam) {
-    return <Navigate to='/profile' />; // like location.replace() but leverages React Router's ability not to reload the browser
+    return <Navigate to='/profile' />; // like location.replace() but leverages React Router's ability not to reload the browser, well be unable to nav back with back arrow.
   }
 
   if (loading) {

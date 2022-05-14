@@ -20,7 +20,6 @@ const ThoughtForm = () => {
             } catch (e) {
                 console.warn('First thought insertion by user!')
             }
-
             try {
                 // read what's currently in the QUERY_THOUGHTS cache
                 const { thoughts } = cache.readQuery({ query: QUERY_THOUGHTS });
